@@ -8,6 +8,7 @@ import { BehaviorSubject } from 'rxjs/BehaviorSubject';
 @Injectable()
 export class ProfileService implements Resolve<any>
 {
+    
     timeline: any;
     about: any;
     photosVideos: any;
