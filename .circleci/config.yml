@@ -48,7 +48,7 @@ jobs:
             gitChanged frontend || npm install -g @nebulae/cli # before npm install -g nebulae
             gitChanged frontend || npm install -g @angular/cli
             gitChanged frontend || nebulae register microfrontend --microservice-id=profile --frontend-id=emi --setup-file=/home/circleci/nebulae/repo/etc/mfe-setup.json --store-type=GCP_DATASTORE --gcp-service-account-token=/tmp/gcloud-service-key.json
-            gitChanged frontend || nebulae compose-ui production --shell-type=FUSE2_ANGULAR --shell-repo=https://github.com/nebulae-tpm/emi.git --frontend-id=emi --output-dir=/home/circleci/nebulae/frontend/emi/ --store-type=GCP_DATASTORE --gcp-service-account-token=/tmp/gcloud-service-key.json
+            gitChanged frontend || nebulae compose-ui production --shell-type=FUSE2_ANGULAR --shell-repo=https://github.com/nebulae-pyxis/emi.git --frontend-id=emi --output-dir=/home/circleci/nebulae/frontend/emi/ --store-type=GCP_DATASTORE --gcp-service-account-token=/tmp/gcloud-service-key.json
             gitChanged frontend || ls /home/circleci/nebulae/frontend/emi/
       # - run:
       #     name: Installing NebulaE cli & Compose FrontEnd
@@ -59,7 +59,7 @@ jobs:
       #       source ~/.profile
       #       npm install -g nebulae
       #       npm install -g @angular/cli
-      #       nebulae compose-ui production --shell-type=FUSE2_ANGULAR --shell-repo=https://github.com/nebulae-tpm/emi.git --frontend-id=emi --output-dir=/tmp/nebulae/emi/ --store-type=GCP_DATASTORE --gcp-service-account-token=/tmp/gcloud-service-key.json      
+      #       nebulae compose-ui production --shell-type=FUSE2_ANGULAR --shell-repo=https://github.com/nebulae-pyxis/emi.git --frontend-id=emi --output-dir=/tmp/nebulae/emi/ --store-type=GCP_DATASTORE --gcp-service-account-token=/tmp/gcloud-service-key.json      
       #       ls /tmp/nebulae/emi/dist
       - run:
           name: Download SHELL Repository
@@ -67,14 +67,14 @@ jobs:
             source ~/nebulae/repo/.circleci/scripts/gitChanged.sh
             cd ~/nebulae/repo/
             mkdir -p ~/nebulae/frontend/shell 
-            gitChanged frontend || ( git clone --depth=1 https://github.com/nebulae-tpm/emi ~/nebulae/frontend/shell ) 
+            gitChanged frontend || ( git clone --depth=1 https://github.com/nebulae-pyxis/emi ~/nebulae/frontend/shell ) 
       - run:
           name: commit & push package-lock.json changes
           command: |
             source ~/nebulae/repo/.circleci/scripts/gitChanged.sh
             cd ~/nebulae/repo/
             gitChanged frontend || cp /home/circleci/nebulae/frontend/emi/package-lock.json ~/nebulae/frontend/shell/frontend/emi/package-lock.json
-            gitChanged frontend || ( cd ~/nebulae/frontend/shell && gitPublishPackageLockChanges "$GITHUB_USER_EMAIL" "$GITHUB_USER_NAME" "$GITHUB_PERSONAL_ACCESS_TOKEN" "nebulae-tpm/emi" "master" && cd ~/nebulae/repo/)
+            gitChanged frontend || ( cd ~/nebulae/frontend/shell && gitPublishPackageLockChanges "$GITHUB_USER_EMAIL" "$GITHUB_USER_NAME" "$GITHUB_PERSONAL_ACCESS_TOKEN" "nebulae-pyxis/emi" "master" && cd ~/nebulae/repo/)
       - setup_remote_docker
       - run:
           name: Build docker image and push it to hub
@@ -108,7 +108,7 @@ jobs:
   #         command: |      
   #           ls /tmp/dist/ 
   #           cd /tmp/
-  #           git clone https://github.com/nebulae-tpm/emi
+  #           git clone https://github.com/nebulae-pyxis/emi
   #           export DOCKERHUB_NAMESPACE=$DOCKERHUB_NAMESPACE
   #           export DOCKERHUB_USER=$DOCKERHUB_USER
   #           export DOCKERHUB_IMAGE=emi
@@ -142,7 +142,7 @@ jobs:
             gitChanged api || source ~/.profile
             gitChanged api || npm install -g @nebulae/cli
             gitChanged api || nebulae register microapi --microservice-id=profile --api-id=gateway --setup-file=/home/circleci/nebulae/repo/etc/mapi-setup.json --store-type=GCP_DATASTORE --gcp-service-account-token=/tmp/gcloud-service-key.json            
-            gitChanged api || nebulae compose-api production --api-type=NEBULAE_GATEWAY --api-repo=https://github.com/nebulae-tpm/gateway.git --api-id=gateway --output-dir=/home/circleci/nebulae/api/gateway/ --store-type=GCP_DATASTORE --gcp-service-account-token=/tmp/gcloud-service-key.json      
+            gitChanged api || nebulae compose-api production --api-type=NEBULAE_GATEWAY --api-repo=https://github.com/nebulae-pyxis/gateway.git --api-id=gateway --output-dir=/home/circleci/nebulae/api/gateway/ --store-type=GCP_DATASTORE --gcp-service-account-token=/tmp/gcloud-service-key.json      
             gitChanged api || ls /home/circleci/nebulae/api/gateway/
       - setup_remote_docker
       - run:
@@ -151,7 +151,7 @@ jobs:
             source ~/nebulae/repo/.circleci/scripts/gitChanged.sh
             cd ~/nebulae/repo/
             mkdir -p ~/nebulae/api
-            gitChanged api || ( cd  ~/nebulae/api/ && git clone --depth=1 https://github.com/nebulae-tpm/gateway  ~/nebulae/api/shell )      
+            gitChanged api || ( cd  ~/nebulae/api/ && git clone --depth=1 https://github.com/nebulae-pyxis/gateway  ~/nebulae/api/shell )      
             gitChanged api || ls ~/nebulae/api/shell
             gitChanged api || export DOCKERHUB_IMAGE=gateway
             gitChanged api || export API_SHELL_PATH=/home/circleci/nebulae/api/
@@ -232,7 +232,7 @@ jobs:
               gcloud --quiet config set compute/zone $GKE_ZONE_PROD
               gcloud --quiet container clusters get-credentials $GKE_CLUSTER
               # cd /tmp/
-              # git clone https://github.com/nebulae-tpm/emi
+              # git clone https://github.com/nebulae-pyxis/emi
               # echo $GCP_SERVICE_ACCOUNT_PROD | base64 --decode --ignore-garbage > /root/gcloud-service-key.json
               # gcloud auth activate-service-account --key-file /root/gcloud-service-key.json            
               # gcloud --quiet config set project $GKE_PROJECT_PROD
@@ -262,26 +262,26 @@ workflows:
   build-and-deploy:
     jobs:
       - prepare:
-          context: TPM
+          context: PYXIS
       - build-frontend:
-          context: TPM
+          context: PYXIS
           requires:
             - prepare
       - build-api:
-          context: TPM
+          context: PYXIS
           requires:
             - prepare
       - build-mbinit:
-          context: TPM
+          context: PYXIS
           requires:
             - prepare
       - build-backend:
-          context: TPM
+          context: PYXIS
           requires:
             - prepare
             - build-mbinit
       - deploy-prod:
-          context: TPM
+          context: PYXIS
           requires:
             - build-frontend
             - build-api
