@@ -27,6 +27,7 @@ export class ProfileComponent implements OnInit {
   }
 
   async ngOnInit() {
+    console.log('==> async ngOnInit() profile microfrontend');
     this.userDetails = await this.keycloakService.loadUserProfile();
   }
 
