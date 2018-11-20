@@ -210,9 +210,9 @@ workflows:
       #    requires:
       #      - prepare
       #      - build-mbinit      
-      #- deploy-prod:
-      #    context: PYXIS
-      #    requires:
-      #      - build-frontend
-            #- build-api
-            #- build-backend
+      - deploy-prod:
+         context: PYXIS
+         requires:
+           - build-frontend
+            # - build-api
+            # - build-backend
